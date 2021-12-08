@@ -1,147 +1,98 @@
-"use strict";
-
-const {src, dest } = require("gulp");
-const gulp = require("gulp");
-const autoprefixer = require("gulp-autoprefixer");
-const cssbeautify = require("gulp-cssbeautify");
-const removeComments = require('gulp-strip-css-comments');
-const rename = require("gulp-rename");
-const sass = require("gulp-sass");
-const cssnano = require("gulp-cssnano");
-const rigger = require("gulp-rigger");
-const uglify = require("gulp-uglify");
-const plumber = require("gulp-plumber");
-const imagemin = require("gulp-imagemin");
-const del = require("del");
-const panini = require("panini");
-const browsersync = require("browser-sync").create();
+const { src, dest, watch, parallel, series } = require('gulp');
+const scss          = require('gulp-sass');
+const concat        = require('gulp-concat');
+const browserSync   = require('browser-sync').create();
+const uglify        = require('gulp-uglify-es').default;
+const postcss       = require('gulp-postcss');
+const autoprefixer  = require('autoprefixer');
+const imagemin      = require('gulp-imagemin');
+const del           = require('del');
 
 
-
-/* Paths to source/build/watch files
-=========================*/
-
-var path = {
-    build: {
-        html: "dist/",
-        js: "dist/assets/js/",
-        css: "dist/assets/css/",
-        images: "dist/assets/i/"
-    },
-    src: {
-        html: "src/*.{htm,html,php}",
-        js: "src/assets/js/*.js",
-        css: "src/assets/scss/style.scss",
-        images: "src/assets/i/**/*.{jpg,png,svg,gif,ico}"
-    },
-    watch: {
-        html: "src/**/*.{htm,html,php}",
-        js: "src/assets/js/**/*.js",
-        css: "src/assets/scss/**/*.scss",
-        images: "src/assets/i/**/*.{jpg,png,svg,gif,ico}"
-    },
-    clean: "./dist"
-};
-
-
-/* Tasks
-=========================*/
-
-function browserSync(done) {
-    browsersync.init({
-        server: {
-            baseDir: "./dist/"
-        },
-        port: 3000
+function browsersync() {
+    browserSync.init({
+        server : {
+            baseDir: 'app/'
+        }
     });
-    done();
 }
 
-function browserSyncReload(done) {
-    browsersync.reload();
-    done();
-}
-
-function html() {
-    panini.refresh();
-    return src(path.src.html, {base: 'src/'})
-        .pipe(plumber())
-        .pipe(panini({
-            root: 'src/',
-            layouts: 'src/tpl/layouts/',
-            partials: 'src/tpl/partials/',
-            helpers: 'src/tpl/helpers/',
-            data: 'src/tpl/data/'
-        }))
-        .pipe(dest(path.build.html))
-        .pipe(browsersync.stream());
-}
-
-function css() {
-    return src(path.src.css, {base: './src/assets/scss/'})
-        .pipe(plumber())
-        .pipe(sass().on('error', sass.logError))
-        .pipe(autoprefixer({
-            browsers: ["last 8 versions"],
-            cascade: true
-        }))
-        .pipe(cssbeautify())
-        .pipe(dest(path.build.css))
-        .pipe(cssnano({
-            zindex: false,
-            discardComments: {
-                removeAll: true
-            }
-        }))
-        .pipe(removeComments())
-        .pipe(rename({
-            suffix: ".min",
-            extname: ".css"
-        }))
-        .pipe(dest(path.build.css))
-        .pipe(browsersync.stream());
-}
-
-function js() {
-    return src(path.src.js, {base: './src/assets/js/'})
-        .pipe(plumber())
-        .pipe(rigger())
-        .pipe(gulp.dest(path.build.js))
-        .pipe(uglify())
-        .pipe(rename({
-            suffix: ".min",
-            extname: ".js"
-        }))
-        .pipe(dest(path.build.js))
-        .pipe(browsersync.stream());
+function clearDist() {
+    return del('dist')
 }
 
 function images() {
-    return src(path.src.images)
-        .pipe(dest(path.build.images));
+    return src('app/images/**/**')
+        .pipe(imagemin([
+            imagemin.gifsicle({interlaced: true}),
+            imagemin.mozjpeg({quality: 75, progressive: true}),
+            imagemin.optipng({optimizationLevel: 5}),
+            imagemin.svgo({
+                plugins: [
+                    {removeViewBox: true},
+                    {cleanupIDs: false}
+                ]
+            })
+        ]))
+        .pipe(dest('dist/images'))
 }
 
-function clean() {
-    return del(path.clean);
+function scripts () {
+    return src([
+    'node_modules/jquery/dist/jquery.js',
+    'node_modules/mixitup/dist/mixitup.js',
+    'node_modules/rateyo/jquery.rateyo.js',
+    'node_modules/slick-carousel/slick/slick.js',
+    'node_modules/@fancyapps/fancybox/dist/jquery.fancybox.js',
+    'app/js/main.js',
+    ])
+    .pipe(concat('main.min.js'))
+    .pipe(uglify())
+    .pipe(dest('app/js'))
+    .pipe(browserSync.stream())
 }
 
-function watchFiles() {
-    gulp.watch([path.watch.html], html);
-    gulp.watch([path.watch.css], css);
-    gulp.watch([path.watch.js], js);
-    gulp.watch([path.watch.images], images);
+function styles() {
+    return src([
+        'node_modules/normalize.css/normalize.css',
+        'node_modules/rateyo/jquery.rateyo.css',
+        'node_modules/slick-carousel/slick/slick.css',
+        'app/scss/style.scss',
+        'node_modules/@fancyapps/fancybox/dist/jquery.fancybox.css'
+    ])
+        .pipe(scss({outputStyle: 'compressed'}))
+        .pipe(concat('style.min.css'))
+        .pipe(postcss([ autoprefixer({
+            overrideBrowserslist:  ['last 10 versions'],
+            grid: true
+        }) ]))
+        .pipe(dest('app/css'))
+        .pipe(browserSync.stream())
 }
 
-const build = gulp.series(clean, gulp.parallel(html, css, js, images));
-const watch = gulp.parallel(build, watchFiles, browserSync);
+function build () {
+    return src ([
+        'app/css/style.min.css',
+        'app/fonts/**/*',
+        'app/js/main.min.js',
+        'app/*.html'
+    ], {base: 'app'})
+    .pipe(dest('dist'))
+}
 
+function watching() {
+    watch(['app/scss/**/*.scss'], styles);
+    watch(['app/js/**/*.js', '!app/js/main.min.js'], scripts);
+    watch(['app/*.html']).on('change', browserSync.reload);
+}
 
-// export tasks
-exports.html = html;
-exports.css = css;
-exports.js = js;
+exports.styles = styles;
+exports.watching = watching;
+exports.browsersync = browsersync;
+exports.scripts = scripts;
 exports.images = images;
-exports.clean = clean;
-exports.build = build;
-exports.watch = watch;
-exports.default = watch;
+exports.clearDist = clearDist;
+
+exports.build = series(clearDist, images, build);
+
+exports.default = parallel(styles, scripts, browsersync, watching);
