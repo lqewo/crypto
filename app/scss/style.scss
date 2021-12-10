@@ -1,3 +1,95 @@
 @import 'vars';
 @import 'global';
 @import 'fonts';
+
+
+// start header
+
+.header {
+    background-color: #151516;
+    font-weight: 400;
+    margin-bottom: 104px;
+
+    &__inner {
+        height: 64px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__language {
+        margin-right: 48px;
+        font-size: 12px;
+        line-height: 12px;
+        text-transform: uppercase;
+    }
+
+    &__login {
+        border-radius: 8px;
+        font-size: 12px;
+        padding: 12px 18px;
+        line-height: 18px;
+        background-color: #F2D080;
+        color: $btn;
+    }
+}
+
+// end header
+
+// start content
+    .content {
+
+        background-color: #000;
+
+        &__inner {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        &-left {
+            max-width: 553px;
+        }
+
+        &__title {
+            color: #fff;
+            font-size: 50px;
+            line-height: 54px;
+            margin-bottom: 32px;
+        }
+
+        &__subtitle {
+            font-size: 16px;
+            line-height: 26px;
+            color: #91919D;
+            margin-bottom: 40px;
+        }
+
+        &__btn {
+            padding: 22px 38px;
+            background: #F2D080;
+            border-radius: 12px;
+            color: $btn;
+            margin-bottom: 160px;
+        }
+
+        &-right {
+            position: relative;
+            width: 100%;
+        }
+
+        &-img {
+            position: absolute;
+
+            &--comp {
+                top: 15px;
+                left: 0;
+            }
+
+            &--phone {
+                top: 45px;
+                left: 542px;
+            }
+        }
+    }
+
+// end content

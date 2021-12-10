@@ -13,16 +13,23 @@ a {
     text-decoration: none;
 }
 
-ul, li {
+ul, li, button {
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
+button {
+    border: 0;
+    background-color: inherit;
+    color: #fff;
+    cursor: pointer;
+}
+
 .container {
     margin: 0 auto;
     padding: 0 15px;
-    max-width: 1200px;
+    max-width: 1230px;
 }
 
 .container-fluid {
@@ -38,9 +45,17 @@ ul, li {
 }
 
 body {
+    font-family: 'Inter', sans-serif;
     margin: 0;
+    background-color: #000;
+    color: #91919D;
+    font-size: 16px;
+    line-height: 26px;
 }
 
 .title {
-
+    font-family: 'Gilroy-Bold', sans-serif ;
+    font-weight: 700;
+    font-size: 42px;
+    line-height: 46px;
 }
