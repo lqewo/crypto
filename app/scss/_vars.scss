@@ -1,4 +1,12 @@
 $gray: #151516;
+$title: #07070B;
+$subtitle: #91919D;
 $black: #313438;
 $wg: #F6F7FA;
 $btn: #07070B;
+
+@mixin gilroy {
+    font-family: 'Gilroy-Bold', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+}

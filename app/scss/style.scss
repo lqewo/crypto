@@ -51,6 +51,7 @@
         }
 
         &__title {
+            @include gilroy;
             color: #fff;
             font-size: 50px;
             line-height: 54px;
@@ -60,7 +61,7 @@
         &__subtitle {
             font-size: 16px;
             line-height: 26px;
-            color: #91919D;
+            color: $subtitle;
             margin-bottom: 40px;
         }
 
@@ -93,3 +94,86 @@
     }
 
 // end content
+
+
+// start statistick
+    .statistick {
+        background-color: #151516;
+
+        &__wrapper {
+            height: 250px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        &__item {
+            text-align: center;
+
+            &-number{
+                @include gilroy;
+                color: #fff;
+                font-size: 64px;
+                line-height: 72px;
+            }
+
+            &-text{
+                font-size: 16px;
+                line-height: 26px;
+            }
+
+        }
+    }
+// end statistick
+
+// start crypt
+    .crypt {
+        padding-top: 72px;
+        padding-bottom: 32px;
+        background-color: #fff;
+
+        &__title {
+            color: $title;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        &__subtitle {
+            color: $subtitle;
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        &__inner{
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .slick-list {
+            padding: 22px 60px !important;
+        }
+
+        &__inner--reverse {
+            .slick-track{
+                padding-right: 150px !important;
+            }
+        }
+
+
+        &__item {
+            box-shadow: 0px 0px 17px rgba(17, 25, 48, 0.06), 0px 29px 20px -18px rgba(29, 34, 48, 0.06);
+            border-radius: 32px;
+            margin: 0 32px;
+            padding: 48px;
+            max-width: 288px;
+            width: 100%;
+            display: flex !important;
+            align-items: center;
+
+            &-image {
+                padding-right: 20px;
+            }
+        }
+    }
+// start crypt
