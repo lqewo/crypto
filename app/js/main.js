@@ -4,12 +4,11 @@ $(function() {
     centerMode: true,
     centerPadding: '60px',
     speed: 10000,
-    slidesToShow: 5,
+    slidesToShow: 3,
     arrows: false,
     slidesToScroll: 1,
     autoplaySpeed: 0,
     autoplay: true,
-    infinite: true,
     responsive: [
       {
         breakpoint: 768,
@@ -37,13 +36,12 @@ $(function() {
     centerMode: true,
     centerPadding: '60px',
     speed: 10000,
-    slidesToShow: 5,
     arrows: false,
-    infinite: true,
-    slidesToScroll: 1,
+    slidesToShow: 5,
+    variableWidth: true,
+    slidesToScroll: -1,
     autoplaySpeed: 0,
     autoplay: true,
-
 
     responsive: [
       {

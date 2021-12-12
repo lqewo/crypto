@@ -129,8 +129,8 @@
 
 // start crypt
     .crypt {
-        padding-top: 72px;
-        padding-bottom: 32px;
+        padding-top: 90px;
+        padding-bottom: 42px;
         background-color: #fff;
 
         &__title {
@@ -148,16 +148,21 @@
         &__inner{
             display: flex;
             justify-content: space-between;
+            min-width: 0;
         }
 
         .slick-list {
+            overflow: hidden;
             padding: 22px 60px !important;
         }
 
+        .slick-track {
+            display: flex;
+        }
+
         &__inner--reverse {
-            .slick-track{
-                padding-right: 150px !important;
-            }
+            display: flex;
+            min-width: 0;
         }
 
 
@@ -176,4 +181,63 @@
             }
         }
     }
-// start crypt
+// end crypt
+
+// start card
+    .card {
+        background-color: #fff;
+    }
+
+    .card__title {
+        text-align: center;
+        color: $title;
+        margin-bottom: 64px;
+    }
+
+    .card__inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .card__item {
+        display: flex;
+        justify-content: start;
+        flex-direction: column;
+        align-items: center;
+
+        border-radius: 8px;
+        margin-bottom: 32px;
+        width: 378px;
+        height: 274px;
+        background-color: $wg;
+        padding: 32px;
+
+        & + & {
+            margin-left: 32px;
+        }
+
+        &:nth-child(3n+1) {
+            margin-left: 0;
+        }
+
+        img {
+            margin-top: 18px;
+            width: 100%;
+            height: 104px;
+            max-width: 104px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .card__item-text {
+            margin-top: 45px;
+            text-align: center;
+            color: $gray;
+
+        }
+    }
+
+
+// end card
